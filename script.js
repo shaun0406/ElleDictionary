@@ -39,11 +39,13 @@ function showCustomModal(message, showConfirmButton = false, onConfirm = null) {
         modalCloseBtn.textContent = 'OK';
         confirmActionCallback = null;
     }
-    customModal.classList.remove('hidden');
+    customModal.classList.remove('hidden'); // This line makes it visible (by removing 'hidden')
+    customModal.style.display = 'flex'; // Explicitly set display to flex when showing
 }
 
 function hideCustomModal() {
-    customModal.classList.add('hidden');
+    customModal.classList.add('hidden'); // This line hides it (by adding 'hidden')
+    customModal.style.display = 'none'; // Explicitly set display to none when hiding
     modalMessage.textContent = '';
     modalConfirmBtn.classList.add('hidden');
     modalCloseBtn.textContent = 'OK';
