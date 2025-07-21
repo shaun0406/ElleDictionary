@@ -11,6 +11,10 @@ html, body { /* Added html to ensure full height */
 
 body {
     font-family: 'Inter', sans-serif;
+    /* New: Pink background for bedazzling */
+    background-color: #FFB6C1; /* Light Pink */
+    position: relative; /* Needed for absolute positioning of glitter */
+
     /* Ensure body takes full viewport height and prevents horizontal overflow */
     min-height: 100vh;
     overflow-x: hidden;
@@ -22,11 +26,44 @@ body {
     padding-bottom: 2rem; /* Add some padding at the bottom for mobile */
 }
 
+/* White sparkly glitters effect */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none; /* Allows clicks to pass through */
+    background-image:
+        radial-gradient(circle at 15% 25%, rgba(255,255,255,0.6) 1px, transparent 1px),
+        radial-gradient(circle at 70% 80%, rgba(255,255,255,0.6) 1px, transparent 1px),
+        radial-gradient(circle at 40% 60%, rgba(255,255,255,0.6) 1px, transparent 1px),
+        radial-gradient(circle at 90% 10%, rgba(255,255,255,0.6) 1px, transparent 1px),
+        radial-gradient(circle at 5% 95%, rgba(255,255,255,0.6) 1px, transparent 1px),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.6) 1px, transparent 1px);
+    background-size: 30px 30px; /* Adjust for density */
+    animation: sparkle-glitter 3s infinite alternate; /* Subtle shimmering animation */
+}
+
+@keyframes sparkle-glitter {
+    from { opacity: 0.7; }
+    to { opacity: 1; }
+}
+
+
+/* Adjust header gradient to match new theme */
+header {
+    background-image: linear-gradient(to right, #FF69B4, #FF1493); /* Hot Pink to Deep Pink */
+}
+
 /* Ensure main sections take full width and grow vertically */
 section {
     width: 100%;
     max-width: 100%; /* Ensure sections don't overflow */
     flex-grow: 1; /* Allow sections to grow and fill available space */
+    /* Ensure content sections have a white background for contrast */
+    background-color: #FFFFFF; /* Explicitly set to white */
 }
 
 /* Custom styles for modal */
