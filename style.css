@@ -3,7 +3,7 @@ body {
 }
 /* Custom styles for modal */
 .modal {
-    display: none; /* Hidden by default */
+    /* Removed 'display: flex;' from here */
     position: fixed; /* Stay in place */
     z-index: 100; /* Sit on top */
     left: 0;
@@ -12,9 +12,9 @@ body {
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-    display: flex;
     align-items: center;
     justify-content: center;
+    /* The 'hidden' class from Tailwind will now correctly apply display: none; */
 }
 .modal-content {
     background-color: #fefefe;
