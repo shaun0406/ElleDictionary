@@ -72,8 +72,8 @@ async function initializeFirebase() {
             measurementId: "G-GKWT6NC52T" // Measurement ID is optional and not used in this app's logic
         };
 
-        // The appId variable used in collection paths should match the appId from your firebaseConfig
-        const appId = firebaseConfig.appId;
+        // Use projectId for the collection path as it matches the {appId} in security rules
+        const projectIdForCollection = firebaseConfig.projectId;
         const initialAuthToken = null; // This is for the Canvas environment, not needed for GitHub Pages deployment
 
         // Initialize Firebase app
@@ -98,7 +98,7 @@ async function initializeFirebase() {
             userIdValue.textContent = currentUserId;
             userIdDisplay.classList.remove('hidden');
             isAuthReady = true; // Mark authentication as ready
-            setupRealtimeListener(appId); // Pass appId to the listener
+            setupRealtimeListener(projectIdForCollection); // Pass projectId for collection
         });
     } catch (error) {
         console.error("Error initializing Firebase:", error);
@@ -107,10 +107,10 @@ async function initializeFirebase() {
 }
 
 // --- Real-time Data Listener ---
-function setupRealtimeListener(appId) { // Accept appId as a parameter
+function setupRealtimeListener(projectIdForCollection) { // Accept projectId as a parameter
     if (db && currentUserId && isAuthReady) {
-        // Use the actual appId for the collection path
-        const dictionaryCollectionRef = collection(db, `artifacts/${appId}/public/data/dictionary`);
+        // Use the actual projectId for the collection path
+        const dictionaryCollectionRef = collection(db, `artifacts/${projectIdForCollection}/public/data/dictionary`);
         const q = query(dictionaryCollectionRef, orderBy('timestamp', 'desc'));
 
         onSnapshot(q, (snapshot) => {
@@ -191,11 +191,11 @@ addUpdateBtn.addEventListener('click', async () => {
     }
 
     try {
-        // Use the actual appId for the collection path
-        const dictionaryCollectionRef = collection(db, `artifacts/${firebaseConfig.appId}/public/data/dictionary`);
+        // Use the actual projectId for the collection path
+        const dictionaryCollectionRef = collection(db, `artifacts/${firebaseConfig.projectId}/public/data/dictionary`);
         if (editingEntry) {
             // Update existing entry
-            const entryDocRef = doc(db, `artifacts/${firebaseConfig.appId}/public/data/dictionary`, editingEntry.id);
+            const entryDocRef = doc(db, `artifacts/${firebaseConfig.projectId}/public/data/dictionary`, editingEntry.id);
             await updateDoc(entryDocRef, {
                 word: word,
                 meaning: meaning,
@@ -252,8 +252,8 @@ function confirmDelete(id) {
                 showCustomModal('Database not initialized. Please try again.');
                 return;
             }
-            // Use the actual appId for the collection path
-            await deleteDoc(doc(db, `artifacts/${firebaseConfig.appId}/public/data/dictionary`, id));
+            // Use the actual projectId for the collection path
+            await deleteDoc(doc(db, `artifacts/${firebaseConfig.projectId}/public/data/dictionary`, id));
             showCustomModal('Entry deleted successfully!');
         } catch (error) {
                 console.error("Error deleting document:", error);
