@@ -91,7 +91,7 @@ async function initializeFirebase() {
                     await signInAnonymously(auth);
                 } catch (error) {
                     console.error("Error signing in:", error);
-                    showCustomModal(`Error signing in: ${error.message}`);
+                    showCustomModal(`Error signing in: ${error.message}`); // Keep this error message
                 }
             }
             currentUserId = auth.currentUser?.uid || crypto.randomUUID(); // Set user ID
@@ -102,7 +102,7 @@ async function initializeFirebase() {
         });
     } catch (error) {
         console.error("Error initializing Firebase:", error);
-        showCustomModal(`Error initializing Firebase: ${error.message}`);
+        showCustomModal(`Error initializing Firebase: ${error.message}`); // Keep this error message
     }
 }
 
@@ -121,7 +121,7 @@ function setupRealtimeListener(projectIdForCollection) { // Accept projectId as 
             renderDictionaryEntries(entries);
         }, (error) => {
             console.error("Error fetching dictionary entries:", error);
-            showCustomModal(`Error fetching dictionary entries: ${error.message}`);
+            showCustomModal(`Error fetching dictionary entries: ${error.message}`); // Keep this error message
         });
     }
 }
@@ -181,12 +181,12 @@ addUpdateBtn.addEventListener('click', async () => {
     const meaning = meaningInput.value.trim();
 
     if (!word || !meaning) {
-        showCustomModal('Word and Meaning cannot be empty.');
+        showCustomModal('Word and Meaning cannot be empty.'); // Keep this validation message
         return;
     }
 
     if (!db) {
-        showCustomModal('Database not initialized. Please try again.');
+        showCustomModal('Database not initialized. Please try again.'); // Keep this error message
         return;
     }
 
@@ -201,7 +201,7 @@ addUpdateBtn.addEventListener('click', async () => {
                 meaning: meaning,
                 timestamp: new Date(), // Update timestamp on edit
             });
-            showCustomModal('Entry updated successfully!');
+            // Removed: showCustomModal('Entry updated successfully!');
         } else {
             // Add new entry
             await addDoc(dictionaryCollectionRef, {
@@ -210,7 +210,7 @@ addUpdateBtn.addEventListener('click', async () => {
                 timestamp: new Date(),
                 userId: currentUserId, // Store the user ID who added the entry
             });
-            showCustomModal('Entry added successfully!');
+            // Removed: showCustomModal('Entry added successfully!');
         }
         wordInput.value = '';
         meaningInput.value = '';
@@ -220,7 +220,7 @@ addUpdateBtn.addEventListener('click', async () => {
         cancelEditBtn.classList.add('hidden');
     } catch (error) {
         console.error("Error adding/updating document:", error);
-        showCustomModal(`Error adding/updating entry: ${error.message}`);
+        showCustomModal(`Error adding/updating entry: ${error.message}`); // Keep this error message
     }
 });
 
@@ -249,15 +249,15 @@ function confirmDelete(id) {
     showCustomModal('Are you sure you want to delete this entry?', true, async () => {
         try {
             if (!db) {
-                showCustomModal('Database not initialized. Please try again.');
+                showCustomModal('Database not initialized. Please try again.'); // Keep this error message
                 return;
             }
             // Use the actual projectId for the collection path
             await deleteDoc(doc(db, `artifacts/${firebaseConfig.projectId}/public/data/dictionary`, id));
-            showCustomModal('Entry deleted successfully!');
+            // Removed: showCustomModal('Entry deleted successfully!');
         } catch (error) {
                 console.error("Error deleting document:", error);
-                showCustomModal(`Error deleting entry: ${error.message}`);
+                showCustomModal(`Error deleting entry: ${error.message}`); // Keep this error message
         }
     });
 }
