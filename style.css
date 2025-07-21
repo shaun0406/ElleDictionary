@@ -1,9 +1,22 @@
+/* Ensure consistent box model */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
     font-family: 'Inter', sans-serif;
+    /* Ensure body takes full viewport height and prevents horizontal overflow */
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* Make body a flex container to center its main content sections */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Align content to the top, but allow vertical centering if space permits */
 }
+
 /* Custom styles for modal */
 .modal {
-    /* Removed 'display: flex;' from here */
     position: fixed; /* Stay in place */
     z-index: 100; /* Sit on top */
     left: 0;
@@ -14,7 +27,6 @@ body {
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
     align-items: center;
     justify-content: center;
-    /* The 'hidden' class from Tailwind will now correctly apply display: none; */
 }
 .modal-content {
     background-color: #fefefe;
