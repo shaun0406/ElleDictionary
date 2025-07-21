@@ -3,6 +3,12 @@
   box-sizing: border-box;
 }
 
+html, body { /* Added html to ensure full height */
+    height: 100%; /* Ensure both html and body take full height */
+    margin: 0;
+    padding: 0;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     /* Ensure body takes full viewport height and prevents horizontal overflow */
@@ -13,6 +19,14 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: flex-start; /* Align content to the top, but allow vertical centering if space permits */
+    padding-bottom: 2rem; /* Add some padding at the bottom for mobile */
+}
+
+/* Ensure main sections take full width and grow vertically */
+section {
+    width: 100%;
+    max-width: 100%; /* Ensure sections don't overflow */
+    flex-grow: 1; /* Allow sections to grow and fill available space */
 }
 
 /* Custom styles for modal */
