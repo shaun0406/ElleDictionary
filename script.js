@@ -61,14 +61,20 @@ modalConfirmBtn.addEventListener('click', () => {
 // --- Firebase Initialization and Authentication ---
 async function initializeFirebase() {
     try {
-        // Retrieve Firebase config and app ID from global variables
-        // In a real GitHub Pages deployment, you would hardcode your Firebase config here
-        // or load it from a separate config file/environment variables.
-        // Example: const firebaseConfig = { apiKey: "YOUR_API_KEY", authDomain: "YOUR_AUTH_DOMAIN", ... };
-        // const appId = "YOUR_APP_ID"; // You would define your app ID here
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        // Your web app's Firebase configuration (provided by the user)
+        const firebaseConfig = {
+            apiKey: "AIzaSyCaCTJe7SN5eM8zOLTZt4E8VR0nggz5aOI",
+            authDomain: "edict-571bf.firebaseapp.com",
+            projectId: "edict-571bf",
+            storageBucket: "edict-571bf.firebasestorage.app",
+            messagingSenderId: "462139852346",
+            appId: "1:462139852346:web:cee6b6d00d6beac3f35703",
+            measurementId: "G-GKWT6NC52T" // Measurement ID is optional and not used in this app's logic
+        };
+
+        // The appId variable used in collection paths should match the appId from your firebaseConfig
+        const appId = firebaseConfig.appId;
+        const initialAuthToken = null; // This is for the Canvas environment, not needed for GitHub Pages deployment
 
         // Initialize Firebase app
         const app = initializeApp(firebaseConfig);
@@ -80,11 +86,9 @@ async function initializeFirebase() {
             if (!user) {
                 // Sign in anonymously if no user is authenticated
                 try {
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                    } else {
-                        await signInAnonymously(auth);
-                    }
+                    // For GitHub Pages, you typically sign in anonymously here.
+                    // The initialAuthToken is specific to the Canvas environment.
+                    await signInAnonymously(auth);
                 } catch (error) {
                     console.error("Error signing in:", error);
                     showCustomModal(`Error signing in: ${error.message}`);
@@ -94,7 +98,7 @@ async function initializeFirebase() {
             userIdValue.textContent = currentUserId;
             userIdDisplay.classList.remove('hidden');
             isAuthReady = true; // Mark authentication as ready
-            setupRealtimeListener(); // Start listening for data once auth is ready
+            setupRealtimeListener(appId); // Pass appId to the listener
         });
     } catch (error) {
         console.error("Error initializing Firebase:", error);
@@ -103,10 +107,10 @@ async function initializeFirebase() {
 }
 
 // --- Real-time Data Listener ---
-function setupRealtimeListener() {
+function setupRealtimeListener(appId) { // Accept appId as a parameter
     if (db && currentUserId && isAuthReady) {
-        // Use the dynamic __app_id for the collection path
-        const dictionaryCollectionRef = collection(db, `artifacts/${__app_id}/public/data/dictionary`);
+        // Use the actual appId for the collection path
+        const dictionaryCollectionRef = collection(db, `artifacts/${appId}/public/data/dictionary`);
         const q = query(dictionaryCollectionRef, orderBy('timestamp', 'desc'));
 
         onSnapshot(q, (snapshot) => {
@@ -187,10 +191,11 @@ addUpdateBtn.addEventListener('click', async () => {
     }
 
     try {
-        const dictionaryCollectionRef = collection(db, `artifacts/${__app_id}/public/data/dictionary`);
+        // Use the actual appId for the collection path
+        const dictionaryCollectionRef = collection(db, `artifacts/${firebaseConfig.appId}/public/data/dictionary`);
         if (editingEntry) {
             // Update existing entry
-            const entryDocRef = doc(db, `artifacts/${__app_id}/public/data/dictionary`, editingEntry.id);
+            const entryDocRef = doc(db, `artifacts/${firebaseConfig.appId}/public/data/dictionary`, editingEntry.id);
             await updateDoc(entryDocRef, {
                 word: word,
                 meaning: meaning,
@@ -247,7 +252,8 @@ function confirmDelete(id) {
                 showCustomModal('Database not initialized. Please try again.');
                 return;
             }
-            await deleteDoc(doc(db, `artifacts/${__app_id}/public/data/dictionary`, id));
+            // Use the actual appId for the collection path
+            await deleteDoc(doc(db, `artifacts/${firebaseConfig.appId}/public/data/dictionary`, id));
             showCustomModal('Entry deleted successfully!');
         } catch (error) {
                 console.error("Error deleting document:", error);
@@ -258,3 +264,14 @@ function confirmDelete(id) {
 
 // Initialize Firebase when the window loads
 window.onload = initializeFirebase;
+
+// Define firebaseConfig globally so it can be accessed by other functions
+const firebaseConfig = {
+    apiKey: "AIzaSyCaCTJe7SN5eM8zOLTZt4E8VR0nggz5aOI",
+    authDomain: "edict-571bf.firebaseapp.com",
+    projectId: "edict-571bf",
+    storageBucket: "edict-571bf.firebasestorage.app",
+    messagingSenderId: "462139852346",
+    appId: "1:462139852346:web:cee6b6d00d6beac3f35703",
+    measurementId: "G-GKWT6NC52T"
+};
