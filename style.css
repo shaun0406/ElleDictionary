@@ -62,8 +62,8 @@ section {
     width: 100%;
     max-width: 100%; /* Ensure sections don't overflow */
     flex-grow: 1; /* Allow sections to grow and fill available space */
-    /* Ensure content sections have a white background for contrast */
-    background-color: #FFFFFF; /* Explicitly set to white */
+    /* Updated: Semi-transparent white background for content sections to let glitter show through */
+    background-color: rgba(255, 255, 255, 0.85); /* Slightly transparent white */
 }
 
 /* Custom styles for modal */
